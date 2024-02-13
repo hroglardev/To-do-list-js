@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A to do list project using vanilla JS",
   "main": "index.js",
+  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --open",
