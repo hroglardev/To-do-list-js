@@ -1,45 +1,65 @@
-export const displayContent = () => {
-  const mainContent = document.querySelector('#content')
-  const listNode = DataManager.initilizeAppList()
-  const list = listNode.getList()
+import { DomElement, ToDoDomElement, TextElement, ButtonElement } from '../../classes/DomElements'
+import { DataManager, StorageManager } from '../../classes/appClasses'
 
-  if (list.length > 0) {
-    list.forEach((projectElement, index) => {
-      const projectNode = listNode.getItem(index)
-      const container = new DomElement('div', 'project-container', `project-${index}`)
-      mainContent.appendChild(container.element)
-
-      const title = new TextElement('h2', 'project-title', '', projectElement.title)
-      const removeButton = new ButtonElement('button', 'remove-project', '', () => {
-        const updatedList = DataManager.removeItemAndUpdateList(index)
-
-        renderContent(updatedList)
-      })
-
-      const project = new DomElement('div', 'project-body', '')
-      container.appendChildren(title.element, removeButton.element, project.element)
-
-      const toDolist = projectElement.getList()
-
-      if (toDolist.length > 0) {
-        toDolist.forEach((todo, todoIndex) => {
-          const card = new DomElement('article', 'card', `todo-${container.element.id}-${todoIndex}`)
-          const toDoElement = new ToDoDomElement(projectNode, todo.title, todo.description, todo.priority, todoIndex, todo)
-          container.appendChildren(card.element)
-          card.appendChildren(toDoElement.title.element, toDoElement.description.element, toDoElement.description.element, toDoElement.removeButton.element, toDoElement.checkButton.element)
-        })
-      }
+class TodoRenderer extends Renderer {
+  static render(projectNode, projectIndex) {
+    const list = projectNode.getList()
+    const todoIndex = list.length - 1
+    const todoNode = projectNode.getItem(todoIndex)
+    const projectContainer = document.getElementById(`project-body-${projectIndex}`)
+    const card = new DomElement(('article', 'card', `todo-${projectIndex}-${todoIndex}`))
+    const toDoElementDom = new ToDoDomElement(projectNode, todoNode.title, todoNode.description, todoNode.priority, todoIndex, todoNode)
+    projectContainer.appendChild(card.element)
+    card.appendChildren(toDoElementDom.title.element, toDoElementDom.description.element, toDoElementDom.description.element, toDoElementDom.removeButton.element, toDoElementDom.checkButton.element)
+    toDoElementDom.checkButton.element.addEventListener('click', () => {
+      todoNode.toggleIsComplete()
+      this.render(projectNode, projectIndex, todoIndex)
+    })
+    toDoElementDom.removeButton.element.addEventListener('click', () => {
+      DataManager.removeTodoAndUpdateList(projectIndex, todoIndex)
+      this.render(projectNode, projectIndex)
     })
   }
 }
 
-// Add this function to render the content based on the updated list
-const renderContent = (list) => {
-  const mainContent = document.querySelector('#content')
-  mainContent.innerHTML = ''
-  // Render content based on the updated list
-  list.forEach((projectElement, index) => {
-    const container = new DomElement('div', 'project-container', `project-${index}`)
+class ProjectRenderer extends Renderer {
+  static render() {
+    const listNode = DataManager.appList
+    const list = listNode.getList()
+    const mainContent = document.querySelector('#content')
+    const projectIndex = list.length - 1
+    mainContent.innerHTML = ''
+
+    const container = new DomElement('div', 'project-container', `project-${projectIndex}`)
     mainContent.appendChild(container.element)
-  })
+
+    const title = new TextElement('h2', 'project-title', '', projectElement.title)
+    const removeButton = new ButtonElement('button', 'remove-project', '', 'Delete project')
+    removeButton.element.addEventListener('click', () => {
+      DataManager.removeProjectAndUpdateList(projectIndex, listNode)
+      this.render(listNode)
+      if (projectIndex === 0) {
+        StorageManager.clearStorage()
+      }
+    })
+
+    const projectBox = new DomElement('div', 'project-body', `project-body-${projectIndex}`)
+    container.appendChildren(title.element, removeButton.element, projectBox.element)
+  }
+}
+
+class ListRenderer extends Renderer {
+  static render() {
+    const listNode = DataManager.appList
+    const list = listNode.getList()
+    if (list.length > 0) {
+      list.forEach((project, index) => {
+        const projectList = project.getList()
+        ProjectRenderer.render()
+        projectList.forEach((_todo) => {
+          TodoRenderer.render(project, index)
+        })
+      })
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import { ButtonElement, DomElement, TextElement, ToDoDomElement } from './DomElements'
-import { DataManager } from './appClasses'
+import { DataManager, StorageManager } from './appClasses'
 import { FormSection, TodoForm } from './formClasses'
 
 export class Renderer {
@@ -37,53 +37,78 @@ export class FormRenderer extends Renderer {
   }
 }
 
-export class ProjectRenderer extends Renderer {
-  static render() {
-    const listNode = DataManager.initilizeAppList()
+class ProjectRenderer extends Renderer {
+  render(projectNode) {
+    const listNode = DataManager.appList
     const list = listNode.getList()
-    const mainContent = document.querySelector('#content')
 
-    list.forEach((projectElement, index) => {
-      const container = new DomElement('div', 'project-container', `project-${index}`)
+    if (list.length > 0) {
+      const mainContent = document.querySelector('#content')
+      const projectIndex = listNode.getNodeIndex(projectNode)
+      const containerExists = document.querySelector(`#project-${projectIndex}`)
+      if (containerExists !== null) {
+        containerExists.remove()
+      }
+
+      const container = new DomElement('div', 'project-container', `project-${projectIndex}`)
       mainContent.appendChild(container.element)
-      console.log('proyecto', projectElement)
-      const title = new TextElement('h2', 'project-title', '', projectElement.title)
+
+      const title = new TextElement('h2', 'project-title', '', projectNode.title)
       const removeButton = new ButtonElement('button', 'remove-project', '', 'Delete project')
-      removeButton.element.addEventListener('click', () => listNode.removeItem(index))
-      const projectBox = new DomElement('div', 'project-body', `project-body-${index}`)
+      removeButton.element.addEventListener('click', () => {
+        DataManager.removeProjectAndUpdateList(projectNode)
+        container.element.remove()
+        if (projectIndex === 0 && list.length === 1) {
+          StorageManager.clearStorage()
+        }
+      })
+
+      const projectBox = new DomElement('div', 'project-body', `project-body-${projectIndex}`)
       container.appendChildren(title.element, removeButton.element, projectBox.element)
-      TodoRenderer.render(projectElement, index)
-    })
+    }
   }
 }
 
-export class TodoRenderer extends Renderer {
-  static render(projectNode, projectIndex) {
+class TodoRenderer extends Renderer {
+  render(projectNode, todoNode) {
+    const listNode = DataManager.appList
     const list = projectNode.getList()
+    if (list.length > 0) {
+      const projectIndex = listNode.getNodeIndex(projectNode)
+      const todoIndex = projectNode.getNodeIndex(todoNode)
 
-    const projectContainer = document.getElementById(`project-body-${projectIndex}`)
-    if (list.length !== 0) {
-      list.forEach((todoElement, index) => {
-        const card = new DomElement('article', 'card', `todo-${projectIndex}-${index}`)
-        const toDoElementDom = new ToDoDomElement(projectNode, todoElement.title, todoElement.desciption, todoElement.priority, index, todoElement)
-        projectContainer.appendChild(card.element)
-        card.appendChildren(
-          toDoElementDom.title.element,
-          toDoElementDom.description.element,
-          toDoElementDom.description.element,
-          toDoElementDom.removeButton.element,
-          toDoElementDom.checkButton.element
-        )
-        toDoElementDom.checkButton.element.addEventListener('click', () => {
-          todoElement.toggleIsComplete()
-          this.render(projectNode, projectIndex)
-        })
+      const projectContainer = document.getElementById(`project-body-${projectIndex}`)
 
-        toDoElementDom.removeButton.element.addEventListener('click', () => {
-          DataManager.removeTodoAndUpdateList(projectIndex, index)
-          this.render(projectNode, projectIndex)
-        })
+      const card = new DomElement('article', 'card', `todo-${projectIndex}-${todoIndex}`)
+      const toDoElementDom = new ToDoDomElement(projectNode, todoNode.title, todoNode.description, todoNode.priority, todoIndex, todoNode)
+
+      projectContainer.appendChild(card.element)
+      card.appendChildren(toDoElementDom.title.element, toDoElementDom.description.element, toDoElementDom.description.element, toDoElementDom.removeButton.element, toDoElementDom.checkButton.element)
+      toDoElementDom.checkButton.element.addEventListener('click', () => {
+        todoNode.toggleIsComplete()
+        ListRenderer.render()
+      })
+      toDoElementDom.removeButton.element.addEventListener('click', () => {
+        DataManager.removeTodoAndUpdateList(projectIndex, todoNode)
+        card.element.remove()
       })
     }
+  }
+}
+
+export class ListRenderer extends Renderer {
+  static render() {
+    const listNode = DataManager.appList
+    const projectRenderer = new ProjectRenderer()
+    const todoRenderer = new TodoRenderer()
+    const list = listNode.getList()
+
+    list.forEach((project) => {
+      const projectList = project.getList()
+      projectRenderer.render(project)
+      projectList.forEach((todo) => {
+        todoRenderer.render(project, todo)
+      })
+    })
   }
 }
