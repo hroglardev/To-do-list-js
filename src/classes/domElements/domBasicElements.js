@@ -67,6 +67,7 @@ export class TextInputElement extends InputElement {
 export class DateInputElement extends InputElement {
   constructor(className, id) {
     super('input', className, id, 'date')
+    this.element.min = new Date().toISOString().split('T')[0]
   }
 }
 
