@@ -73,10 +73,9 @@ export class DateInputElement extends InputElement {
 }
 
 export class FormElement extends DomElement {
-  constructor(tag, className, id, ...inputs) {
+  constructor(tag, className, id) {
     super(tag, className, id)
     this.element.setAttribute('novalidate', true)
-    this.element.addEventListener('input', () => Validator.validateInputs(inputs))
   }
 
   submitForm(event) {

@@ -90,8 +90,17 @@ export class TodoFormDomElement {
     this.projectSection = new SelectFormSection('Select project to add to-do')
     this.dateSection = new DateFormSection('Pick a due date:')
     this.submitButton = new ButtonElement('button', 'create-todo', '', 'Create')
-    this.form = new TodoForm('form', 'todo-form', '', this.titleSection.input.element.value, this.descriptionSection.input.element.value)
+    this.form = new TodoForm('form', 'todo-form', '')
 
+    this.form.element.addEventListener('input', () => {
+      this.form.activateButton(
+        [this.titleSection.input.element.value, this.descriptionSection.input.element.value],
+        this.prioritySection.select.element.value,
+        this.projectSection.select.element.value,
+        this.dateSection.date.element.value
+      )
+    })
+    this.submitButton.element.setAttribute('disabled', true)
     this.prioritySection.setOptions(priorityOptions)
     this.projectSection.setOptions(projects)
     this.appendSelf()
@@ -112,6 +121,7 @@ export class TodoFormDomElement {
 
   addSubmitListener() {
     this.form.element.addEventListener('submit', (event) => {
+      this.submitButton.element.setAttribute('disabled', true)
       const listNode = AppManager.appList
       const projectNode = listNode.getNodeByName(this.projectSection.select.element.value)
       const projectIndex = listNode.getNodeIndex(projectNode)

@@ -1,9 +1,26 @@
 import { DomElement, InputElement, LabelElement, TextElement, FormElement, DateInputElement } from './domBasicElements'
 import { AppManager } from './appManager'
+import { Validator } from './validator'
 
 export class TodoForm extends FormElement {
-  constructor(tag, className, id, ...inputs) {
-    super(tag, className, id, ...inputs)
+  constructor(tag, className, id) {
+    super(tag, className, id)
+  }
+
+  activateButton(inputs, prioritySelect, projectSelect, datepicker) {
+    const submitButton = document.querySelector('.create-todo')
+    const isTextValid = Validator.validateTextInputs(inputs)
+    const isPriorityValid = Validator.validateSelectAndDate(prioritySelect)
+    const isProjectValid = Validator.validateSelectAndDate(projectSelect)
+    const isDateValid = Validator.validateSelectAndDate(datepicker)
+
+    if (isTextValid && isPriorityValid && isProjectValid && isDateValid) {
+      console.log('entre al if')
+      submitButton.removeAttribute('disabled')
+    } else {
+      console.log('entre al else')
+      submitButton.setAttribute('disabled', true)
+    }
   }
 
   submitForm(event, todoTitle, todoDescription, toDoPriority, todoProjectName, todoDueDate) {
@@ -34,6 +51,7 @@ export class FormSection {
     this.input = new InputElement('input', 'input', '', type)
     this.label = new LabelElement('label', '', text)
     this.error = new TextElement('p', 'error-paragraph', '', '')
+
     this.appendSelf()
   }
 
@@ -45,6 +63,22 @@ export class FormSection {
 export class TextFormSection extends FormSection {
   constructor(text) {
     super(text, 'text')
+    this.validateInput = this.validateInput.bind(this)
+    this.input.element.addEventListener('input', this.validateInput)
+  }
+
+  validateInput() {
+    const isValid = Validator.validateTextInputs(this.input.element.value)
+    console.log('se ejecuto validateInput para texto')
+    if (!isValid) {
+      this.input.addClass('is-invalid')
+      this.error.addClass('has-error')
+      this.error.element.innerText = 'Must complete the field'
+    } else {
+      this.input.removeClass('is-invalid')
+      this.error.removeClass('has-error')
+      this.error.element.innerText = ''
+    }
   }
 }
 
@@ -53,11 +87,15 @@ export class SelectFormSection {
     this.container = new DomElement('div', 'form-section', '')
     this.select = new DomElement('select', 'select', '')
     this.label = new LabelElement('label', '', text)
+    this.error = new TextElement('p', 'error-paragraph', '', '')
+
+    this.validateSelect = this.validateSelect.bind(this)
+    this.select.element.addEventListener('change', this.validateSelect)
     this.appendSelf()
   }
 
   appendSelf() {
-    this.container.appendChildren(this.label.element, this.select.element)
+    this.container.appendChildren(this.label.element, this.select.element, this.error.element)
   }
 
   setOptions(options) {
@@ -75,6 +113,18 @@ export class SelectFormSection {
       this.select.appendChildren(optionElement)
     })
   }
+  validateSelect() {
+    const isValid = Validator.validateSelectAndDate(this.select.element.value)
+    if (!isValid) {
+      this.select.addClass('is-invalid')
+      this.error.element.innerText = 'Must complete the field'
+      this.error.addClass('has-error')
+    } else {
+      this.select.removeClass('is-invalid')
+      this.error.element.innerText = ''
+      this.error.removeClass('has-error')
+    }
+  }
 }
 
 export class DateFormSection {
@@ -82,10 +132,26 @@ export class DateFormSection {
     this.container = new DomElement('div', 'form-section', '')
     this.date = new DateInputElement('datepicker', '')
     this.label = new LabelElement('label', '', text)
+    this.error = new TextElement('p', 'error-paragraph', '', '')
+    this.validateDate = this.validateDate.bind(this)
+    this.date.element.addEventListener('change', this.validateDate)
     this.appendSelf()
   }
 
   appendSelf() {
     this.container.appendChildren(this.label.element, this.date.element)
+  }
+
+  validateDate() {
+    const isValid = Validator.validateSelectAndDate(this.date.element.value)
+    if (!isValid) {
+      this.date.addClass('is-invalid')
+      this.error.element.innerText = 'Must complete the field'
+      this.error.addClass('has-error')
+    } else {
+      this.date.removeClass('is-invalid')
+      this.date.element.innerText = ''
+      this.error.removeClass('has-error')
+    }
   }
 }

@@ -5,7 +5,7 @@ import { ButtonElement } from './domBasicElements'
 
 export class Renderer {
   static render() {
-    throw Error('Hola')
+    throw Error('The Parent class cannot use this method')
   }
 }
 
@@ -51,7 +51,7 @@ export class ProjectFormRenderer extends Renderer {
 }
 
 class ProjectRenderer extends Renderer {
-  render(projectNode) {
+  static render(projectNode) {
     const listNode = AppManager.appList
     const list = listNode.getList()
 
@@ -69,7 +69,7 @@ class ProjectRenderer extends Renderer {
 }
 
 class TodoRenderer extends Renderer {
-  render(projectNode, todoNode) {
+  static render(projectNode, todoNode) {
     const listNode = AppManager.appList
     const list = projectNode.getList()
     if (list.length > 0) {
@@ -90,15 +90,13 @@ class TodoRenderer extends Renderer {
 export class ListRenderer extends Renderer {
   static render() {
     const listNode = AppManager.appList
-    const projectRenderer = new ProjectRenderer()
-    const todoRenderer = new TodoRenderer()
     const list = listNode.getList()
 
     list.forEach((project) => {
       const projectList = project.getList()
-      projectRenderer.render(project)
+      ProjectRenderer.render(project)
       projectList.forEach((todo) => {
-        todoRenderer.render(project, todo)
+        TodoRenderer.render(project, todo)
       })
     })
   }

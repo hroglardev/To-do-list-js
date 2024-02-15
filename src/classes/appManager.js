@@ -1,3 +1,5 @@
+import { List, ToDo, Project } from './appClasses'
+import { StorageManager } from './storageManager'
 export class AppManager {
   static appList = AppManager.initilizeAppList()
 
@@ -59,7 +61,7 @@ export class AppManager {
 
   static addProjectAndUpdateList(projectTitle) {
     const newProject = new Project(projectTitle)
-    const listNode = DataManager.appList
+    const listNode = AppManager.appList
     listNode.addItem(newProject)
     StorageManager.saveItem('list', listNode.getList())
     StorageManager.saveItem(projectTitle, newProject.getList())
@@ -67,7 +69,7 @@ export class AppManager {
   }
 
   static removeProjectAndUpdateList(projectNode) {
-    const listNode = DataManager.appList
+    const listNode = AppManager.appList
     const index = listNode.getNodeIndex(projectNode)
     if (index !== -1) {
       listNode.removeItem(index)
@@ -78,7 +80,7 @@ export class AppManager {
 
   static addTodoAndUpdateList(todoTitle, todoDescription, todoPriority, todoProjectName, todoDueDate) {
     const newTodo = new ToDo(todoTitle, todoDescription, todoPriority, false, todoDueDate)
-    const list = DataManager.appList.getList()
+    const list = AppManager.appList.getList()
     const project = list.find((project) => project.title === todoProjectName)
     project.addItem(newTodo)
     StorageManager.saveItem(todoProjectName, project.getList())
@@ -86,7 +88,7 @@ export class AppManager {
   }
 
   static removeTodoAndUpdateList(projectIndex, todoNode) {
-    const appList = DataManager.appList
+    const appList = AppManager.appList
     const projectNode = appList.getItem(projectIndex)
     const todoIndex = projectNode.getNodeIndex(todoNode)
     projectNode.removeItem(todoIndex)
