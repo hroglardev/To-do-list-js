@@ -1,5 +1,6 @@
-import { List, ToDo, Project } from './appClasses'
+import { List, ToDo, Project } from '../appLogic/appClasses'
 import { StorageManager } from './storageManager'
+
 export class AppManager {
   static appList = AppManager.initilizeAppList()
 

@@ -1,5 +1,3 @@
-import { Validator } from './validator'
-
 export class DomElement {
   constructor(tag, className, id) {
     this.element = document.createElement(tag)

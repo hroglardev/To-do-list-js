@@ -1,6 +1,6 @@
 import { DomElement, InputElement, LabelElement, TextElement, FormElement, DateInputElement } from './domBasicElements'
-import { AppManager } from './appManager'
-import { Validator } from './validator'
+import { AppManager } from '../services/appManager'
+import { Validator } from '../services/validator'
 
 export class TodoForm extends FormElement {
   constructor(tag, className, id) {

@@ -65,6 +65,7 @@ export class Project extends List {
 
   sortListHightoLow() {
     this.#projects.sort((a, b) => b.priority - a.priority)
+    console.log(this.#projects, 'funco?')
   }
 
   sortListLowtoHigh() {

@@ -1,15 +1,16 @@
 import { DomElement, TextElement, ButtonElement } from './domBasicElements'
-import { AppManager } from './appManager'
+import { AppManager } from '../services/appManager'
 import { TextFormSection, SelectFormSection, TodoForm, DateFormSection } from './formElements'
-import { priorityOptions } from './constants'
-import { StorageManager } from './storageManager'
-import { ToDoFormRenderer } from './renderer'
-import { Validator } from './validator'
+import { priorityOptions } from '../constants'
+import { StorageManager } from '../services/storageManager'
+import { ToDoFormRenderer, ProjectRenderer, TodoRenderer } from '../services/renderer'
+import { Validator } from '../services/validator'
 
 export class ToDoDomElement {
-  constructor(title, description, priority) {
-    this.card = new DomElement('article', `card`, '')
+  constructor(title, description, priority, dueDate, projectIndex) {
+    this.card = new DomElement('article', `card`, `todo-${projectIndex}-${title.replace(/\s/g, '-')}`)
     this.title = new TextElement('h3', 'card-title', '', title)
+    this.dueDate = new TextElement('p', 'due-date', '', dueDate)
     this.description = new TextElement('p', 'card-desc', '', description)
     this.removeButton = new ButtonElement('button', 'delete-todo', '', 'Remove')
     this.checkButton = new ButtonElement('button', 'complete-todo', '', 'Complete Task')
@@ -18,7 +19,7 @@ export class ToDoDomElement {
   }
 
   appendSelf() {
-    this.card.appendChildren(this.title.element, this.description.element, this.removeButton.element, this.checkButton.element)
+    this.card.appendChildren(this.title.element, this.description.element, this.dueDate.element, this.removeButton.element, this.checkButton.element)
   }
 
   addRemoveListener(projectIndex, todoNode) {
@@ -127,7 +128,13 @@ export class TodoFormDomElement {
       const projectNode = listNode.getNodeByName(this.projectSection.select.element.value)
       const projectIndex = listNode.getNodeIndex(projectNode)
       const projectContainer = document.querySelector(`#project-body-${projectIndex}`)
-      const newTodo = new ToDoDomElement(this.titleSection.input.element.value, this.descriptionSection.input.element.value)
+      const newTodo = new ToDoDomElement(
+        this.titleSection.input.element.value,
+        this.descriptionSection.input.element.value,
+        this.prioritySection.select.element.value,
+        this.dateSection.date.element.value,
+        projectIndex
+      )
       const todoNode = this.form.submitForm(
         event,
         this.titleSection.input.element.value,
@@ -139,6 +146,7 @@ export class TodoFormDomElement {
       projectContainer.appendChild(newTodo.card.element)
       newTodo.addRemoveListener(projectIndex, todoNode)
       newTodo.addToggleListener(todoNode)
+      TodoRenderer.render(projectNode, todoNode)
     })
   }
 }

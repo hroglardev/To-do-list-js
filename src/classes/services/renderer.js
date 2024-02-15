@@ -1,7 +1,7 @@
 import { AppManager } from './appManager'
-import { TodoFormDomElement, ProjectDomElement, ToDoDomElement } from './domSpecialElements'
-import { FormSection, ProjectForm, TextFormSection } from './formElements'
-import { ButtonElement } from './domBasicElements'
+import { TodoFormDomElement, ProjectDomElement, ToDoDomElement } from '../domElements/domSpecialElements'
+import { ProjectForm, TextFormSection } from '../domElements/formElements'
+import { ButtonElement } from '../domElements/domBasicElements'
 import { Validator } from './validator'
 
 export class Renderer {
@@ -72,16 +72,21 @@ class ProjectRenderer extends Renderer {
   }
 }
 
-class TodoRenderer extends Renderer {
+export class TodoRenderer extends Renderer {
   static render(projectNode, todoNode) {
     const listNode = AppManager.appList
     const list = projectNode.getList()
     if (list.length > 0) {
       const projectIndex = listNode.getNodeIndex(projectNode)
-
       const projectContainer = document.getElementById(`project-body-${projectIndex}`)
 
-      const toDoElementDom = new ToDoDomElement(todoNode.title, todoNode.description, todoNode.priority)
+      const containerExists = document.getElementById(`todo-${projectIndex}-${todoNode.title.replace(/\s/g, '-')}`)
+
+      if (containerExists !== null) {
+        containerExists.remove()
+      }
+
+      const toDoElementDom = new ToDoDomElement(todoNode.title, todoNode.description, todoNode.priority, todoNode.dueDate, projectIndex)
 
       projectContainer.appendChild(toDoElementDom.card.element)
 
