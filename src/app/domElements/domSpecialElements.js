@@ -3,7 +3,7 @@ import { AppManager } from '../services/appManager'
 import { TextFormSection, SelectFormSection, TodoForm, DateFormSection } from './formElements'
 import { priorityOptions } from '../constants'
 import { StorageManager } from '../services/storageManager'
-import { ToDoFormRenderer, ProjectRenderer, TodoRenderer } from '../services/renderer'
+import { ToDoFormRenderer, TodoRenderer } from '../services/renderer'
 import { Validator } from '../services/validator'
 
 export class ToDoDomElement {
@@ -52,7 +52,7 @@ export class ProjectDomElement {
   constructor(title, projectIndex) {
     this.container = new DomElement('div', 'project-container', `project-${projectIndex}`)
     this.title = new TextElement('h2', 'project-title', '', title)
-    this.removeButton = new ButtonElement('button', 'remove-project', '', 'Delete Project')
+    this.removeButton = new ButtonElement('button', 'remove-project', '', 'X')
     this.titleContainer = new DomElement('div', 'project-title-container', '')
     this.projectBox = new DomElement('div', 'project-body', `project-body-${projectIndex}`)
 
@@ -89,7 +89,7 @@ export class TodoFormDomElement {
     this.titleSection = new TextFormSection('Name your task:')
     this.descriptionSection = new TextFormSection('Describe the task:')
     this.prioritySection = new SelectFormSection("What's the priority")
-    this.projectSection = new SelectFormSection('Select project to add to-do')
+    this.projectSection = new SelectFormSection('Select project')
     this.dateSection = new DateFormSection('Pick a due date:')
     this.submitButton = new ButtonElement('button', 'create-todo', '', 'Create')
     this.form = new TodoForm('form', 'todo-form', '')

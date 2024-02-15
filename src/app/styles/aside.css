@@ -1,0 +1,27 @@
+.todo-form {
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid var(--accent-color);
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  gap: 15px;
+}
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.todo-form > .section-container > .form-section {
+  display: grid;
+
+  gap: 5px;
+}
+
+.create-todo {
+  width: 100px;
+  height: 40px;
+  align-self: center;
+}

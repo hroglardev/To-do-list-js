@@ -1,0 +1,49 @@
+.logo {
+  display: grid;
+  place-content: center;
+  color: var(--font-color-light);
+}
+
+.references {
+  display: flex;
+  gap: 25px;
+  color: var(--font-color-light);
+}
+
+.project-form {
+  display: flex;
+  gap: 25px;
+  color: var(--font-color-light);
+  align-items: center;
+}
+
+.project-form > .form-section {
+  display: grid;
+  place-content: center;
+}
+
+.color-reference {
+  width: 15px;
+  height: 15px;
+}
+
+#color-priority-1 {
+  background-color: var(--priority-one);
+}
+#color-priority-2 {
+  background-color: var(--priority-two);
+}
+#color-priority-3 {
+  background-color: var(--priority-three);
+}
+#color-priority-4 {
+  background-color: var(--priority-four);
+}
+#color-priority-5 {
+  background-color: var(--priority-five);
+}
+
+.create-project {
+  height: 50px;
+  width: 100px;
+}
