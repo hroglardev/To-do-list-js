@@ -1,5 +1,6 @@
 export class Validator {
   static validateInputs(inputs) {
+    console.log('Estas tipeando')
     return inputs.every((input) => input.trim().length > 0)
   }
 }

@@ -24,6 +24,10 @@ export class List {
   getNodeIndex(node) {
     return this.#list.indexOf(node)
   }
+
+  getNodeByName(name) {
+    return this.#list.find((node) => node.title === name)
+  }
 }
 
 export class Project extends List {
@@ -66,21 +70,28 @@ export class Project extends List {
   sortListLowtoHigh() {
     this.#projects.sort((a, b) => a.priority - b.priority)
   }
+
+  sortByDueDate() {
+    this.#projects.sort((a, b) => a.dueDate - b.dueDate)
+  }
 }
 
 export class ToDo {
-  constructor(title, description, priority, isComplete = false) {
+  constructor(title, description, priority, isComplete = false, dueDate) {
     this.title = title
     this.description = description
     this.priority = priority
     this.isComplete = isComplete
-    this.setDueDate()
+    this.dueDate = dueDate
   }
 
-  setDueDate(daysToAdd = 0) {
-    const currentDate = new Date()
-    currentDate.setDate(currentDate.getDate() + daysToAdd)
-    this.dueDate = currentDate
+  setDueDate(date) {
+    if (date) {
+      const currentDate = new Date(date)
+      this.dueDate = currentDate
+    } else {
+      this.dueDate = null
+    }
   }
 
   setPriority(newPriority) {
@@ -89,7 +100,7 @@ export class ToDo {
 
   toggleIsComplete() {
     this.isComplete = !this.isComplete
-    console.log('se ejecuto el toggle')
+    return this.isComplete
   }
 }
 
@@ -126,7 +137,7 @@ export class DataManager {
         const toDos = StorageManager.loadItem(project.title)
         if (toDos !== null && toDos.length > 0) {
           toDos.forEach((todo) => {
-            const toDoItem = new ToDo(todo.title, todo.description, todo.priority, todo.isComplete)
+            const toDoItem = new ToDo(todo.title, todo.description, todo.priority, todo.isComplete, todo.dueDate)
             projectItem.addItem(toDoItem)
           })
         }
@@ -167,8 +178,17 @@ export class DataManager {
       StorageManager.saveItem(baseProject5.getTitle(), baseProject5.getList())
       StorageManager.saveItem(baseProject6.getTitle(), baseProject6.getList())
     }
-    console.log(appList.getList(), 'La lista')
+
     return appList
+  }
+
+  static addProjectAndUpdateList(projectTitle) {
+    const newProject = new Project(projectTitle)
+    const listNode = DataManager.appList
+    listNode.addItem(newProject)
+    StorageManager.saveItem('list', listNode.getList())
+    StorageManager.saveItem(projectTitle, newProject.getList())
+    return newProject
   }
 
   static removeProjectAndUpdateList(projectNode) {
@@ -179,6 +199,15 @@ export class DataManager {
       StorageManager.saveItem('list', listNode.getList())
       StorageManager.removeItem(projectNode.getTitle(), projectNode.getList())
     }
+  }
+
+  static addTodoAndUpdateList(todoTitle, todoDescription, todoPriority, todoProjectName, todoDueDate) {
+    const newTodo = new ToDo(todoTitle, todoDescription, todoPriority, false, todoDueDate)
+    const list = DataManager.appList.getList()
+    const project = list.find((project) => project.title === todoProjectName)
+    project.addItem(newTodo)
+    StorageManager.saveItem(todoProjectName, project.getList())
+    return newTodo
   }
 
   static removeTodoAndUpdateList(projectIndex, todoNode) {

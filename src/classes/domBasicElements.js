@@ -1,3 +1,5 @@
+import { Validator } from './validator'
+
 export class DomElement {
   constructor(tag, className, id) {
     this.element = document.createElement(tag)
@@ -37,6 +39,13 @@ export class TextElement extends DomElement {
   }
 }
 
+export class LabelElement extends TextElement {
+  constructor(className, id, text, forAttribute) {
+    super('label', className, id, text)
+    this.element.setAttribute('for', forAttribute)
+  }
+}
+
 export class ButtonElement extends DomElement {
   constructor(tag, className, id, text) {
     super(tag, className, id)
@@ -57,26 +66,20 @@ export class TextInputElement extends InputElement {
   }
 }
 
-export class RadioInputElement extends InputElement {
+export class DateInputElement extends InputElement {
   constructor(className, id) {
-    super('input', className, id, 'radio')
+    super('input', className, id, 'date')
   }
 }
 
-export class LabelElement extends TextElement {
-  constructor(tag, className, id, text, forAttribute) {
-    super(tag, className, id, text)
-    this.element.setAttribute('for', forAttribute)
+export class FormElement extends DomElement {
+  constructor(tag, className, id, ...inputs) {
+    super(tag, className, id)
+    this.element.setAttribute('novalidate', true)
+    this.element.addEventListener('input', () => Validator.validateInputs(inputs))
   }
-}
 
-export class ToDoDomElement {
-  constructor(project, title, description, priority, index, todo) {
-    this.title = new TextElement('h2', 'card-title', '', title)
-    this.description = new TextElement('p', 'card-desc', '', description)
-    this.priority = priority
-    this.index = index
-    this.removeButton = new ButtonElement('button', 'delete-todo', '', 'Remove')
-    this.checkButton = new ButtonElement('button', 'complete-todo', '', 'Set-complete')
+  submitForm(event) {
+    event.preventDefault()
   }
 }
