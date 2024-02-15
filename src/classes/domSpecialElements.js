@@ -4,6 +4,7 @@ import { TextFormSection, SelectFormSection, TodoForm, DateFormSection } from '.
 import { priorityOptions } from './constants'
 import { StorageManager } from './storageManager'
 import { ToDoFormRenderer } from './renderer'
+import { Validator } from './validator'
 
 export class ToDoDomElement {
   constructor(title, description, priority) {
@@ -93,7 +94,7 @@ export class TodoFormDomElement {
     this.form = new TodoForm('form', 'todo-form', '')
 
     this.form.element.addEventListener('input', () => {
-      this.form.activateButton(
+      Validator.activateTodoButton(
         [this.titleSection.input.element.value, this.descriptionSection.input.element.value],
         this.prioritySection.select.element.value,
         this.projectSection.select.element.value,

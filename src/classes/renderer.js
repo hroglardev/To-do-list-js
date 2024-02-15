@@ -1,7 +1,8 @@
 import { AppManager } from './appManager'
 import { TodoFormDomElement, ProjectDomElement, ToDoDomElement } from './domSpecialElements'
-import { FormSection, ProjectForm } from './formElements'
+import { FormSection, ProjectForm, TextFormSection } from './formElements'
 import { ButtonElement } from './domBasicElements'
+import { Validator } from './validator'
 
 export class Renderer {
   static render() {
@@ -26,12 +27,15 @@ export class ProjectFormRenderer extends Renderer {
   static render() {
     const header = document.querySelector('#header')
 
-    const projectTitle = new FormSection("Input your project's name:")
+    const projectTitle = new TextFormSection("Input your project's name:")
     const submitButton = new ButtonElement('button', 'create-project', '', 'Create')
+    submitButton.element.setAttribute('disabled', true)
     const form = new ProjectForm('form', 'project-form', '', projectTitle.input.element.value)
-
+    form.element.addEventListener('input', () => Validator.activateProjectButton(projectTitle.input.element.value))
     form.appendChildren(projectTitle.container.element, submitButton.element)
+
     form.element.addEventListener('submit', (event) => {
+      submitButton.element.setAttribute('disabled', true)
       const mainContent = document.querySelector('#content')
       const listNode = AppManager.appList
       const projectNode = form.submitForm(event, projectTitle.input.element.value)

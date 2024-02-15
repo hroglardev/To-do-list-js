@@ -7,22 +7,6 @@ export class TodoForm extends FormElement {
     super(tag, className, id)
   }
 
-  activateButton(inputs, prioritySelect, projectSelect, datepicker) {
-    const submitButton = document.querySelector('.create-todo')
-    const isTextValid = Validator.validateTextInputs(inputs)
-    const isPriorityValid = Validator.validateSelectAndDate(prioritySelect)
-    const isProjectValid = Validator.validateSelectAndDate(projectSelect)
-    const isDateValid = Validator.validateSelectAndDate(datepicker)
-
-    if (isTextValid && isPriorityValid && isProjectValid && isDateValid) {
-      console.log('entre al if')
-      submitButton.removeAttribute('disabled')
-    } else {
-      console.log('entre al else')
-      submitButton.setAttribute('disabled', true)
-    }
-  }
-
   submitForm(event, todoTitle, todoDescription, toDoPriority, todoProjectName, todoDueDate) {
     event.preventDefault()
     console.log(AppManager.appList.getList())
