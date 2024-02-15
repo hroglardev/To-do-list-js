@@ -1,5 +1,5 @@
 import { DomElement, InputElement, LabelElement, TextElement, FormElement, DateInputElement } from './domBasicElements'
-import { DataManager } from './appClasses'
+import { AppManager } from './appManager'
 
 export class TodoForm extends FormElement {
   constructor(tag, className, id, ...inputs) {
@@ -8,9 +8,9 @@ export class TodoForm extends FormElement {
 
   submitForm(event, todoTitle, todoDescription, toDoPriority, todoProjectName, todoDueDate) {
     event.preventDefault()
-    console.log(DataManager.appList.getList())
+    console.log(AppManager.appList.getList())
     this.element.reset()
-    const toDo = DataManager.addTodoAndUpdateList(todoTitle, todoDescription, toDoPriority, todoProjectName, todoDueDate)
+    const toDo = AppManager.addTodoAndUpdateList(todoTitle, todoDescription, toDoPriority, todoProjectName, todoDueDate)
     return toDo
   }
 }
@@ -22,7 +22,7 @@ export class ProjectForm extends FormElement {
   submitForm(event, projectTitle) {
     event.preventDefault()
     this.element.reset()
-    const project = DataManager.addProjectAndUpdateList(projectTitle)
+    const project = AppManager.addProjectAndUpdateList(projectTitle)
 
     return project
   }

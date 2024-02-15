@@ -1,8 +1,8 @@
 import { DomElement, TextElement, ButtonElement } from './domBasicElements'
-import { DataManager } from './appClasses'
+import { AppManager } from './appManager'
 import { TextFormSection, SelectFormSection, TodoForm, DateFormSection } from './formElements'
 import { priorityOptions } from './constants'
-import { StorageManager } from './appClasses'
+import { StorageManager } from './storageManager'
 import { ToDoFormRenderer } from './renderer'
 
 export class ToDoDomElement {
@@ -22,7 +22,7 @@ export class ToDoDomElement {
 
   addRemoveListener(projectIndex, todoNode) {
     this.removeButton.element.addEventListener('click', () => {
-      DataManager.removeTodoAndUpdateList(projectIndex, todoNode)
+      AppManager.removeTodoAndUpdateList(projectIndex, todoNode)
       this.card.element.remove()
     })
   }
@@ -59,13 +59,13 @@ export class ProjectDomElement {
 
   addRemoveListener() {
     this.removeButton.element.addEventListener('click', () => {
-      const listNode = DataManager.appList
+      const listNode = AppManager.appList
       const list = listNode.getList()
       const projectNode = listNode.getNodeByName(this.title.element.textContent)
       const projectIndex = listNode.getNodeIndex(projectNode)
 
       this.container.element.remove()
-      DataManager.removeProjectAndUpdateList(projectNode)
+      AppManager.removeProjectAndUpdateList(projectNode)
       if (projectIndex === 0 && list.length === 0) {
         StorageManager.clearStorage()
       }
@@ -112,7 +112,7 @@ export class TodoFormDomElement {
 
   addSubmitListener() {
     this.form.element.addEventListener('submit', (event) => {
-      const listNode = DataManager.appList
+      const listNode = AppManager.appList
       const projectNode = listNode.getNodeByName(this.projectSection.select.element.value)
       const projectIndex = listNode.getNodeIndex(projectNode)
       const projectContainer = document.querySelector(`#project-body-${projectIndex}`)

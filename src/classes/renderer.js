@@ -1,4 +1,4 @@
-import { DataManager } from './appClasses'
+import { AppManager } from './appManager'
 import { TodoFormDomElement, ProjectDomElement, ToDoDomElement } from './domSpecialElements'
 import { FormSection, ProjectForm } from './formElements'
 import { ButtonElement } from './domBasicElements'
@@ -11,7 +11,7 @@ export class Renderer {
 
 export class ToDoFormRenderer extends Renderer {
   static render() {
-    const listNode = DataManager.appList
+    const listNode = AppManager.appList
     const projectNames = listNode.getList().map((project) => project.title)
     const domForm = document.querySelector('.todo-form')
     if (domForm !== null) {
@@ -33,7 +33,7 @@ export class ProjectFormRenderer extends Renderer {
     form.appendChildren(projectTitle.container.element, submitButton.element)
     form.element.addEventListener('submit', (event) => {
       const mainContent = document.querySelector('#content')
-      const listNode = DataManager.appList
+      const listNode = AppManager.appList
       const projectNode = form.submitForm(event, projectTitle.input.element.value)
       const projectIndex = listNode.getNodeIndex(projectNode)
       const newProject = new ProjectDomElement(projectNode.getTitle(), projectIndex)
@@ -52,7 +52,7 @@ export class ProjectFormRenderer extends Renderer {
 
 class ProjectRenderer extends Renderer {
   render(projectNode) {
-    const listNode = DataManager.appList
+    const listNode = AppManager.appList
     const list = listNode.getList()
 
     if (list.length > 0) {
@@ -70,7 +70,7 @@ class ProjectRenderer extends Renderer {
 
 class TodoRenderer extends Renderer {
   render(projectNode, todoNode) {
-    const listNode = DataManager.appList
+    const listNode = AppManager.appList
     const list = projectNode.getList()
     if (list.length > 0) {
       const projectIndex = listNode.getNodeIndex(projectNode)
@@ -89,7 +89,7 @@ class TodoRenderer extends Renderer {
 
 export class ListRenderer extends Renderer {
   static render() {
-    const listNode = DataManager.appList
+    const listNode = AppManager.appList
     const projectRenderer = new ProjectRenderer()
     const todoRenderer = new TodoRenderer()
     const list = listNode.getList()

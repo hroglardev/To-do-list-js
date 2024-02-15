@@ -2,9 +2,9 @@
 
 import './styles.css'
 import { ToDoFormRenderer, ListRenderer, ProjectFormRenderer } from './classes/renderer'
-import { DataManager } from './classes/appClasses'
+import { AppManager } from './classes/appManager'
 
-DataManager.initilizeAppList()
+AppManager.initilizeAppList()
 ToDoFormRenderer.render()
 ProjectFormRenderer.render()
 ListRenderer.render()
