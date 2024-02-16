@@ -9,7 +9,6 @@ export class TodoForm extends FormElement {
 
   submitForm(event, todoTitle, todoDescription, toDoPriority, todoProjectName, todoDueDate) {
     event.preventDefault()
-    console.log(AppManager.appList.getList())
     this.element.reset()
     const toDo = AppManager.addTodoAndUpdateList(todoTitle, todoDescription, toDoPriority, todoProjectName, todoDueDate)
     return toDo
@@ -30,9 +29,9 @@ export class ProjectForm extends FormElement {
 }
 
 export class FormSection {
-  constructor(text, type) {
+  constructor(text, type, className) {
     this.container = new DomElement('div', 'form-section', '')
-    this.input = new InputElement('input', 'input', '', type)
+    this.input = new InputElement('input', className, '', type)
     this.label = new LabelElement('label', '', text)
     this.error = new TextElement('p', 'error-paragraph', '', '')
 
@@ -45,15 +44,18 @@ export class FormSection {
 }
 
 export class TextFormSection extends FormSection {
-  constructor(text) {
-    super(text, 'text')
-    this.validateInput = this.validateInput.bind(this)
-    this.input.element.addEventListener('input', this.validateInput)
+  constructor(text, className) {
+    super(text, 'text', className)
+    if (className !== 'edit-todo') {
+      this.validateInput = this.validateInput.bind(this)
+      console.log(className, 'ACAAA')
+      this.input.element.addEventListener('input', this.validateInput)
+    }
   }
 
   validateInput() {
     const isValid = Validator.validateTextInputs(this.input.element.value)
-    console.log('se ejecuto validateInput para texto')
+
     if (!isValid) {
       this.input.addClass('is-invalid')
       this.error.addClass('has-error')

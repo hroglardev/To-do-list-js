@@ -1,3 +1,6 @@
+import { AppManager } from '../services/appManager'
+import { StorageManager } from '../services/storageManager'
+
 export class List {
   #list
   constructor() {
@@ -18,7 +21,6 @@ export class List {
 
   removeItem(index) {
     this.#list.splice(index, 1)
-    console.log('borre un proyecto', this.#list)
   }
 
   getNodeIndex(node) {
@@ -48,7 +50,6 @@ export class Project extends List {
 
   removeItem(index) {
     this.#projects.splice(index, 1)
-    console.log('Se borro un todo', this.#projects)
   }
 
   getTitle() {
@@ -65,7 +66,6 @@ export class Project extends List {
 
   sortListHightoLow() {
     this.#projects.sort((a, b) => b.priority - a.priority)
-    console.log(this.#projects, 'funco?')
   }
 
   sortListLowtoHigh() {
@@ -88,19 +88,43 @@ export class ToDo {
 
   setDueDate(date) {
     if (date) {
-      const currentDate = new Date(date)
+      const currentDate = new Date(date).toISOString().slice(0, 10)
       this.dueDate = currentDate
     } else {
       this.dueDate = null
     }
   }
 
-  setPriority(newPriority) {
-    this.priority = newPriority
+  updateToDo(newTitle, newDescription, newPriority, newDueDate) {
+    if (newTitle !== '') {
+      this.title = newTitle
+      console.log('actualice el titulo')
+    }
+
+    if (newDescription !== '') {
+      this.description = newDescription
+      console.log('actualice la desc')
+    }
+
+    if (newPriority !== '') {
+      this.priority = newPriority
+      console.log('actualice la prio')
+    }
+
+    if (newDueDate !== '') {
+      this.setDueDate(newDueDate)
+      console.log('actualice la fecha')
+    }
+    console.log('actualice un nodo', newTitle, newDescription, newPriority, newDueDate)
   }
 
-  toggleIsComplete() {
+  toggleIsComplete(projectIndex) {
     this.isComplete = !this.isComplete
+    const listNode = AppManager.appList
+    const list = listNode.getList()
+    StorageManager.saveItem('list', list)
+    const project = listNode.getItem(projectIndex)
+    StorageManager.saveItem(project.title, project.getList())
     return this.isComplete
   }
 }

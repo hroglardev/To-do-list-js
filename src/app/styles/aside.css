@@ -6,6 +6,7 @@
   flex-direction: column;
   padding: 15px;
   gap: 15px;
+  order: 1;
 }
 
 .section-container {
@@ -16,7 +17,6 @@
 
 .todo-form > .section-container > .form-section {
   display: grid;
-
   gap: 5px;
 }
 
@@ -24,4 +24,39 @@
   width: 100px;
   height: 40px;
   align-self: center;
+}
+
+.references {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  color: var(--font-color-light);
+  order: 2;
+}
+
+.references > div {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.color-reference {
+  width: 15px;
+  height: 15px;
+}
+
+#color-priority-1 {
+  background-color: var(--priority-one);
+}
+#color-priority-2 {
+  background-color: var(--priority-two);
+}
+#color-priority-3 {
+  background-color: var(--priority-three);
+}
+#color-priority-4 {
+  background-color: var(--priority-four);
+}
+#color-priority-5 {
+  background-color: var(--priority-five);
 }

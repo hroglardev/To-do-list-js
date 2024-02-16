@@ -1,6 +1,5 @@
 export class Validator {
   static validateTextInputs(inputs) {
-    console.log('Estas tipeando')
     if (Array.isArray(inputs)) {
       return inputs.every((input) => input.trim().length > 0)
     } else {
@@ -9,7 +8,6 @@ export class Validator {
   }
 
   static validateSelectAndDate(formField) {
-    console.log('Se valido un select')
     return formField !== ''
   }
 
@@ -20,10 +18,8 @@ export class Validator {
     const isProjectValid = Validator.validateSelectAndDate(projectSelect)
     const isDateValid = Validator.validateSelectAndDate(datepicker)
     if (isTextValid && isPriorityValid && isProjectValid && isDateValid) {
-      console.log('entre al if')
       submitButton.removeAttribute('disabled')
     } else {
-      console.log('entre al else')
       submitButton.setAttribute('disabled', true)
     }
   }

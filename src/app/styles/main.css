@@ -1,5 +1,5 @@
 .project-container {
-  width: min(90%, 300px);
+  width: min(90%, 350px);
   display: grid;
   gap: 15px;
   grid-template-rows: auto 1fr;
@@ -14,6 +14,7 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   gap: 10px;
+  align-items: center;
 }
 
 .project-title {
@@ -22,8 +23,8 @@
 
 .remove-project {
   border-radius: 50%;
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 45px;
   display: grid;
   place-content: center;
 }
@@ -37,24 +38,82 @@
 .card {
   padding: 10px 15px;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.priority-1 {
-  border: 2px solid var(--priority-one);
+.todo-title-container {
+  display: flex;
+  justify-content: space-between;
 }
 
-.priority-2 {
-  border: 2px solid var(--priority-two);
+.delete-todo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.priority-3 {
-  border: 2px solid var(--priority-three);
+.priority-1.delete-todo:hover {
+  background-color: var(--priority-one);
+  color: white;
+  border: 1px solid black;
 }
 
-.priority-4 {
-  border: 2px solid var(--priority-four);
+.priority-2.delete-todo:hover {
+  background-color: var(--priority-two);
+  color: white;
+  border: 1px solid black;
 }
 
-.priority-5 {
-  border: 2px solid var(--priority-five);
+.priority-3.delete-todo:hover {
+  background-color: var(--priority-three);
+  color: white;
+  border: 1px solid black;
+}
+
+.priority-4.delete-todo:hover {
+  background-color: var(--priority-four);
+  color: white;
+  border: 1px solid black;
+}
+
+.priority-5.delete-todo:hover {
+  background-color: var(--priority-five);
+  color: white;
+  border: 1px solid black;
+}
+
+.complete-todo {
+  width: fit-content;
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+}
+
+.check-icon {
+  width: 100%;
+  height: auto;
+  min-width: 100%;
+  cursor: pointer;
+}
+
+.check {
+  fill: rgb(0, 163, 0);
+}
+
+.card-desc {
+  display: none;
+  color: white;
+}
+
+.card-desc.show {
+  display: block;
+  color: black;
 }

@@ -30,7 +30,7 @@ export class ProjectFormRenderer extends Renderer {
   static render() {
     const header = document.querySelector('#header')
 
-    const projectTitle = new TextFormSection("Input your project's name:")
+    const projectTitle = new TextFormSection("Input your project's name:", 'todo-input')
     const submitButton = new ButtonElement('button', 'create-project', '', 'Create')
     submitButton.element.setAttribute('disabled', true)
     const form = new ProjectForm('form', 'project-form', '', projectTitle.input.element.value)
@@ -57,7 +57,7 @@ export class ProjectFormRenderer extends Renderer {
   }
 }
 
-class ProjectRenderer extends Renderer {
+export class ProjectRenderer extends Renderer {
   static render(projectNode) {
     const listNode = AppManager.appList
     const list = listNode.getList()
@@ -89,11 +89,11 @@ export class TodoRenderer extends Renderer {
         containerExists.remove()
       }
 
-      const toDoElementDom = new ToDoDomElement(todoNode.title, todoNode.description, todoNode.priority, todoNode.dueDate, projectIndex)
+      const toDoElementDom = new ToDoDomElement(todoNode.title, todoNode.description, todoNode.priority, todoNode.dueDate, projectIndex, todoNode.isComplete, todoNode)
 
       projectContainer.appendChild(toDoElementDom.card.element)
 
-      toDoElementDom.addToggleListener(todoNode)
+      toDoElementDom.addToggleListener(todoNode, projectIndex)
       toDoElementDom.addRemoveListener(projectIndex, todoNode)
     }
   }

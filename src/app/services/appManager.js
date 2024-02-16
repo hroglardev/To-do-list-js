@@ -92,7 +92,18 @@ export class AppManager {
     const appList = AppManager.appList
     const projectNode = appList.getItem(projectIndex)
     const todoIndex = projectNode.getNodeIndex(todoNode)
+    console.log(todoIndex, 'aver?')
     projectNode.removeItem(todoIndex)
+    StorageManager.saveItem(projectNode.getTitle(), projectNode.getList())
+  }
+
+  static updateTodoAndUpdateList(projectIndex, todoNode, newTitle, newDescription, newPriority, newDueDate) {
+    const appList = AppManager.appList
+    console.log(appList, 'la lista')
+    const projectNode = appList.getItem(projectIndex)
+    todoNode.updateToDo(newTitle, newDescription, newPriority, newDueDate)
+    console.log(projectIndex, 'indice')
+    console.log('paso algo aca', projectNode)
     StorageManager.saveItem(projectNode.getTitle(), projectNode.getList())
   }
 }

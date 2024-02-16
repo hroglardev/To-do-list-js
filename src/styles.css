@@ -7,6 +7,7 @@
 :root {
   --main-background-color: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(73, 3, 177, 1) 32%, rgba(102, 3, 100, 1) 100%);
   --header-background-color: rgb(47, 46, 46);
+  --footer-background-color: rgba(102, 3, 100, 0.8);
   --accent-color: rgb(0, 184, 184);
   --font-color-light: #e3e3e3;
   --priority-one: rgb(208, 16, 16);
@@ -16,6 +17,17 @@
   --priority-five: rgb(49, 231, 8);
   --error-message: 'Must complete the field';
   --error-message-color: rgb(209, 38, 38);
+}
+
+body {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.blur {
+  filter: blur(2px) brightness(30%);
+  pointer-events: none;
 }
 
 .container {
@@ -48,7 +60,6 @@
   grid-row: 1 / 3;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-items: center;
   gap: 15px;
   padding: 15px 0px;
 }
@@ -57,14 +68,25 @@
   grid-column: 1 / 2;
   grid-row: 1 / 3;
   padding: 15px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 #footer {
   grid-column: 1 / 3;
   grid-row: 3 / 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--footer-background-color);
+  border-top: 1px solid gray;
+  color: var(--font-color-light);
 }
 
-.input,
+.todo-input,
+.edit-todo,
 .select,
 .datepicker {
   border: 2px solid var(--accent-color);
@@ -73,9 +95,10 @@
   outline: none;
 }
 
-.input:focus,
+.todo-input:focus,
 .select:focus,
-.datepicker:focus {
+.datepicker:focus,
+.edit-todo:focus {
   border: 2px solid rgb(4, 4, 202);
 }
 
@@ -84,7 +107,11 @@ button {
   font-weight: bold;
 }
 
-button:not([disabled]) {
+.create-project:not([disabled]),
+.create-todo:not([disabled]),
+.remove-project:not([disabled]),
+.edit-todo-button:not([disabled]),
+.close-edit:not([disabled]) {
   cursor: pointer;
   border: 3px solid var(--accent-color);
   transition: all 0.3s ease;
@@ -95,7 +122,11 @@ button:disabled {
   border: 3px solid gray;
 }
 
-button:not([disabled]):hover {
+.create-project:not([disabled]):hover,
+.create-todo:not([disabled]):hover,
+.remove-project:not([disabled]):hover,
+.edit-todo-button:not([disabled]):hover,
+.close-edit:not([disabled]):hover {
   background-color: var(--accent-color);
   border: 3px solid var(--font-color-light);
   color: var(--font-color-light);
@@ -108,4 +139,24 @@ button:not([disabled]):hover {
 .has-error {
   color: var(--error-message-color);
   font-size: 0.7rem;
+}
+
+.priority-1 {
+  border: 2px solid var(--priority-one);
+}
+
+.priority-2 {
+  border: 2px solid var(--priority-two);
+}
+
+.priority-3 {
+  border: 2px solid var(--priority-three);
+}
+
+.priority-4 {
+  border: 2px solid var(--priority-four);
+}
+
+.priority-5 {
+  border: 2px solid var(--priority-five);
 }
