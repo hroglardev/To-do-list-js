@@ -7,7 +7,7 @@ import { ToDoFormRenderer, TodoRenderer, ProjectRenderer, ListRenderer } from '.
 import { Validator } from '../services/validator'
 
 import '../styles/editTodo.css'
-
+//EDITAR BOTON DE EDIT, agregar sorters
 export class ToDoDomElement {
   constructor(title, description, priority, dueDate, projectIndex, isComplete = false, todoNode) {
     this.card = new DomElement('article', `card`, `todo-${projectIndex}-${title.replace(/\s/g, '-')}`)
@@ -15,6 +15,8 @@ export class ToDoDomElement {
     this.title = new TextElement('h3', 'card-title', '', title)
     this.dueDate = new TextElement('p', 'due-date', '', dueDate)
     this.description = new TextElement('p', 'card-desc', '', description)
+
+    this.buttonContainer = new DomElement('div', 'button-container', '')
     this.checkButton = new ButtonElement('button', 'complete-todo', '', '')
     this.editButton = new ButtonElement('button', 'edit', '', 'Edit')
     this.isComplete = isComplete
@@ -32,8 +34,9 @@ export class ToDoDomElement {
   }
 
   appendSelf() {
-    this.card.appendChildren(this.titleContainer.element, this.dueDate.element, this.description.element, this.checkButton.element, this.editButton.element)
+    this.card.appendChildren(this.titleContainer.element, this.dueDate.element, this.description.element, this.buttonContainer.element)
     this.titleContainer.appendChildren(this.title.element, this.removeButton.element)
+    this.buttonContainer.appendChildren(this.checkButton.element, this.editButton.element)
   }
 
   setInitialIcon() {
@@ -162,7 +165,7 @@ export class TodoFormDomElement {
       const projectNode = listNode.getNodeByName(this.projectSection.select.element.value)
       const projectIndex = listNode.getNodeIndex(projectNode)
       const projectContainer = document.querySelector(`#project-body-${projectIndex}`)
-      console.log('todo a ver?')
+
       const todoNode = this.form.submitForm(
         event,
         this.titleSection.input.element.value,

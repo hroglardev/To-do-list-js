@@ -58,6 +58,15 @@
   transition: all 0.3s ease;
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.edit {
+  padding: 5px 10px;
+}
+
 .priority-1.delete-todo:hover {
   background-color: var(--priority-one);
   color: white;

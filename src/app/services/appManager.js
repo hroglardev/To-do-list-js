@@ -21,40 +21,12 @@ export class AppManager {
         }
       })
     } else {
-      const baseProject = new Project('Base project')
-      const baseProject2 = new Project('Base project2')
-      const baseProject3 = new Project('Base project3')
-      const baseProject4 = new Project('Base project4')
-      const baseProject5 = new Project('Base project5')
-      const baseProject6 = new Project('Base project6')
-
-      const baseTodo = new ToDo('Do the dishes', 'Mom expects me to do the dishes today', 1)
-      const baseTodo2 = new ToDo('Do laundry', 'Mom expects me to do the laundry today', 1)
-      const baseTodo3 = new ToDo('Mow lawn', 'Mom expects me to mow the lawn today', 1)
-      const baseTodo4 = new ToDo('Make bed', 'Mom expects me to make my today', 1)
-      const baseTodo5 = new ToDo('Walk dog', 'Mom expects me to walk the dog today', 1)
-      const baseTodo6 = new ToDo('Cook dinner', 'Mom expects me to cook dinner today', 1)
+      const baseProject = new Project('Project')
 
       appList.addItem(baseProject)
-      appList.addItem(baseProject2)
-      appList.addItem(baseProject3)
-      appList.addItem(baseProject4)
-      appList.addItem(baseProject5)
-      appList.addItem(baseProject6)
-      baseProject.addItem(baseTodo)
-      baseProject.addItem(baseTodo2)
-      baseProject.addItem(baseTodo3)
-      baseProject3.addItem(baseTodo4)
-      baseProject3.addItem(baseTodo5)
-      baseProject3.addItem(baseTodo6)
 
       StorageManager.saveItem('list', appList.getList())
       StorageManager.saveItem(baseProject.getTitle(), baseProject.getList())
-      StorageManager.saveItem(baseProject2.getTitle(), baseProject2.getList())
-      StorageManager.saveItem(baseProject3.getTitle(), baseProject3.getList())
-      StorageManager.saveItem(baseProject4.getTitle(), baseProject4.getList())
-      StorageManager.saveItem(baseProject5.getTitle(), baseProject5.getList())
-      StorageManager.saveItem(baseProject6.getTitle(), baseProject6.getList())
     }
 
     return appList
@@ -92,18 +64,17 @@ export class AppManager {
     const appList = AppManager.appList
     const projectNode = appList.getItem(projectIndex)
     const todoIndex = projectNode.getNodeIndex(todoNode)
-    console.log(todoIndex, 'aver?')
+
     projectNode.removeItem(todoIndex)
     StorageManager.saveItem(projectNode.getTitle(), projectNode.getList())
   }
 
   static updateTodoAndUpdateList(projectIndex, todoNode, newTitle, newDescription, newPriority, newDueDate) {
     const appList = AppManager.appList
-    console.log(appList, 'la lista')
+
     const projectNode = appList.getItem(projectIndex)
     todoNode.updateToDo(newTitle, newDescription, newPriority, newDueDate)
-    console.log(projectIndex, 'indice')
-    console.log('paso algo aca', projectNode)
+
     StorageManager.saveItem(projectNode.getTitle(), projectNode.getList())
   }
 }

@@ -111,7 +111,8 @@ button {
 .create-todo:not([disabled]),
 .remove-project:not([disabled]),
 .edit-todo-button:not([disabled]),
-.close-edit:not([disabled]) {
+.close-edit:not([disabled]),
+.edit:not([disabled]) {
   cursor: pointer;
   border: 3px solid var(--accent-color);
   transition: all 0.3s ease;
@@ -126,7 +127,8 @@ button:disabled {
 .create-todo:not([disabled]):hover,
 .remove-project:not([disabled]):hover,
 .edit-todo-button:not([disabled]):hover,
-.close-edit:not([disabled]):hover {
+.close-edit:not([disabled]):hover,
+.edit:not([disabled]):hover {
   background-color: var(--accent-color);
   border: 3px solid var(--font-color-light);
   color: var(--font-color-light);

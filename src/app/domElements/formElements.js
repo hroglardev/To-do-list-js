@@ -48,7 +48,6 @@ export class TextFormSection extends FormSection {
     super(text, 'text', className)
     if (className !== 'edit-todo') {
       this.validateInput = this.validateInput.bind(this)
-      console.log(className, 'ACAAA')
       this.input.element.addEventListener('input', this.validateInput)
     }
   }

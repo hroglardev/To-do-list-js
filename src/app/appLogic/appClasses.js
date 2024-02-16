@@ -98,24 +98,19 @@ export class ToDo {
   updateToDo(newTitle, newDescription, newPriority, newDueDate) {
     if (newTitle !== '') {
       this.title = newTitle
-      console.log('actualice el titulo')
     }
 
     if (newDescription !== '') {
       this.description = newDescription
-      console.log('actualice la desc')
     }
 
     if (newPriority !== '') {
       this.priority = newPriority
-      console.log('actualice la prio')
     }
 
     if (newDueDate !== '') {
       this.setDueDate(newDueDate)
-      console.log('actualice la fecha')
     }
-    console.log('actualice un nodo', newTitle, newDescription, newPriority, newDueDate)
   }
 
   toggleIsComplete(projectIndex) {
