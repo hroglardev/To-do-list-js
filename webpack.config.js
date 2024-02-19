@@ -24,7 +24,7 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    static: './dist'
+    static: './src'
   },
 
   module: {
@@ -34,21 +34,13 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
-            options: {
-              esModule: false
-            }
+            loader: 'css-loader'
           }
         ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
-        type: 'asset/resource',
-        use: [
-          {
-            loader: 'file-loader'
-          }
-        ]
+        type: 'asset/resource'
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,

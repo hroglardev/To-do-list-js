@@ -4,7 +4,7 @@ import { ProjectForm, TextFormSection } from '../domElements/formElements'
 import { ButtonElement } from '../domElements/domBasicElements'
 import { Validator } from './validator'
 import '../styles/header.css'
-import '../styles/main.css'
+import '../styles/mainContent.css'
 import '../styles/aside.css'
 
 export class Renderer {
